@@ -3,7 +3,8 @@
     <form>
         <input id="email" type="text" placeholder="Email">
         <input id="password" type="text" placeholder="Password">
-        <button class="login-button" type="button">Login</button>
+        <button [routerLink]="['/posts']" class="login-button" type="button">Login</button>
     </form>
         <p class="footer-elements">Do not have an account? <a class="footer-elements" [routerLink]="['/register']">SIGN UP</a></p>
+        <p><a [routerLink]="['/forgot-password']">Forgot password?</a></p>
 </div>
