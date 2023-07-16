@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -18,9 +19,15 @@ import { PostsComponent } from './posts/posts.component';
     PostsComponent,
   ],
   imports: [
-    BrowserModule,
     AppRoutingModule,
-    RouterModule,
+    BrowserModule,
+    HttpClientModule,
+    RouterModule.forRoot([
+      { path: '', component: PostsComponent },
+      { path: 'login', component: LoginComponent },
+      { path: 'sign-up', component: RegisterComponent },
+      { path: 'posts', component: PostsComponent },
+    ]),
   ],
   providers: [],
   bootstrap: [AppComponent]
