@@ -18,7 +18,6 @@ import { PostsComponent } from './posts/posts.component';
     RegisterComponent,
     ForgotPasswordComponent,
     PostsComponent,
-    NgbModule,
   ],
   imports: [
     AppRoutingModule,
@@ -30,8 +29,10 @@ import { PostsComponent } from './posts/posts.component';
       { path: 'sign-up', component: RegisterComponent },
       { path: 'posts', component: PostsComponent },
     ]),
+    NgbModule,
   ],
   providers: [],
-  bootstrap: [AppComponent, LoginComponent, PostsComponent]
+  bootstrap: [AppComponent]
 })
+
 export class AppModule { }
