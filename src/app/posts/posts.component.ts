@@ -39,7 +39,6 @@ export class PostsComponent {
           if (!Array.isArray(this.posts)) {
             this.router.navigate(['login']);
           }
-
         })
       ;
 

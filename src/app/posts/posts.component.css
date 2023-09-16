@@ -58,7 +58,7 @@ footer{
 a{
     color: #ff0000;
 }
-table, tr, th, td{
+/* table, tr, th, td{
     background-color: #e1e1e1;
     border: 2px solid #ffffff;
     border-collapse: collapse;
@@ -66,4 +66,4 @@ table, tr, th, td{
 }
 th, td{
     padding: 5% 2%;
-}
+} */

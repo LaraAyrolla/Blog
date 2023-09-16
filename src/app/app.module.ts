@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -17,19 +18,20 @@ import { PostsComponent } from './posts/posts.component';
     RegisterComponent,
     ForgotPasswordComponent,
     PostsComponent,
+    NgbModule,
   ],
   imports: [
     AppRoutingModule,
     BrowserModule,
     HttpClientModule,
     RouterModule.forRoot([
-      { path: '', component: PostsComponent },
+      { path: '', component: LoginComponent },
       { path: 'login', component: LoginComponent },
       { path: 'sign-up', component: RegisterComponent },
       { path: 'posts', component: PostsComponent },
     ]),
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent, LoginComponent, PostsComponent]
 })
 export class AppModule { }
