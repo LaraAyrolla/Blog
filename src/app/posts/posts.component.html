@@ -7,28 +7,34 @@
         <article>
             <p hidden class="id">{{post.id}}</p>
             <header><h2>{{post.title}}</h2></header>
-            <p>{{post.content}}</p>
+            <div [innerHTML]="post.content"></div>
         </article>
         <footer>
             <table class="post-footer-table">
                 <tr class="post-footer-tr">
                     <a [routerLink]="['editar', post.id]">
-                        <td>✏️</td>
-                        <td>Editar</td>
+                        <td class="post-footer-td">✏️</td>
+                        <td class="post-footer-td">Editar</td>
                     </a>
                 </tr>
             </table>
             <table class="post-footer-table">
                 <tr class="post-footer-tr">
                     <a [routerLink]="['deletar', post.id]">
-                        <td>🗑️</td>
-                        <td>Excluir</td>
+                        <td class="post-footer-td">🗑️</td>
+                        <td class="post-footer-td">Excluir</td>
                     </a>
                 </tr>
             </table>
         </footer>
     </section>
 
+    <section class="no-posts-section" *ngIf="!posts || posts.length == 0">
+        <article>
+            <header><h2>No posts found</h2></header>
+            <p>The posts you create in the future will show up here!</p>
+        </article>
+    </section>
     <footer>
         <h1>&#9711;</h1>
     </footer>
