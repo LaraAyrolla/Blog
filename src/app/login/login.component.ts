@@ -151,7 +151,7 @@ export class LoginComponent {
   {
     var error_message = '';
     for (var error in errors) {
-      error_message += errors[error] + "<br>";
+      error_message += errors[error] + ". <br>";
     }
 
     return error_message;
