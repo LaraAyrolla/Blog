@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Inject }  from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -8,10 +8,12 @@ import { catchError } from 'rxjs/operators';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.css'],
 })
 export class LoginComponent {
   access_token: any;
+  error: any;
+  error_message: any;
   user_name: any;
   constructor(@Inject(DOCUMENT) document: Document, private http: HttpClient, private route: ActivatedRoute, private router: Router) {}
 
@@ -36,18 +38,22 @@ export class LoginComponent {
 
     const url = 'http://localhost/api/auth/login';
     this.http.post<any>(url, body)
-    .pipe(
-      catchError(err => {return this.router.navigate(['login'])})
-    )
-    .subscribe(res => {
-      this.access_token = res.access_token
+      .pipe(
+        catchError(err => {return this.defineErrorForAlerts(err)})
+      )
+      .subscribe(res => {
+        if (!this.defineErrorForAlerts(res))
+        {
+          this.access_token = res.access_token;
 
-      if (this.access_token !== '') {
-        localStorage.setItem('access_token', this.access_token);
-        this.callMeRoute();
-        this.router.navigate(['posts']);
-      }
-    });
+          if (this.access_token !== '') {
+            localStorage.setItem('access_token', this.access_token);
+            this.callMeRoute();
+            this.router.navigate(['posts']);
+          }
+        }
+      })
+    ;
   }
 
   callMeRoute () {
@@ -72,5 +78,93 @@ export class LoginComponent {
         }
       })
     ;
+  }
+
+  defineErrorForAlerts(res: any): any
+  {
+    if (res == null
+      || res == ''
+      || res.status == 'undefined'
+      || res.status == undefined
+    ) {
+      if (res.access_token !== null)
+      {
+        this.error = 'none';
+        return false;
+      }
+      this.error = 'error';
+      this.error_message = res;
+      return true;
+    }
+
+    if (res.status >= 200 && res.status < 300)
+    {
+      this.error = 'none';
+      return false;
+    }
+
+    switch (res.status)
+    {
+      case 401:
+        this.error = 'unauthorized';
+        break;
+      case 0:
+        this.error = 'error';
+        break;
+      case 400:
+        this.error = 'message';
+        this.error_message = res.message;
+        break;
+      case 404:
+        this.error = 'error';
+        break;
+      case 405:
+        this.error = 'error';
+        break;
+      case 422:
+        this.error = 'message';
+        this.error_message = this.getAllErrorMessages(res.error.errors);
+        break;
+      case 500:
+        this.error = 'error';
+        break;
+      default:
+        this.error = 'error';
+        break;
+    }
+
+    return true;
+  }
+
+  getFirstErrorMessage (errors: Array<string>): string
+  {
+    var error_message = '';
+    for (var error in errors) {
+      error_message += errors[error] + ". " ;
+      break;
+    }
+
+    return error_message;
+  }
+
+  getAllErrorMessages (errors: Array<string>): string
+  {
+    var error_message = '';
+    for (var error in errors) {
+      error_message += errors[error] + "<br>";
+    }
+
+    return error_message;
+  }
+
+  getAllErrorMessagesAsList (errors: Array<string>): string
+  {
+    var error_message = '<ul class="text-align: left;">';
+    for (var error in errors) {
+      error_message += "<li>" + errors[error] + "</li>";
+    }
+    error_message += '</li>'
+
+    return error_message;
   }
 }

@@ -3,13 +3,21 @@
 
     <form>
         <div class="form-group">
-            <input type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Email">
+            <input type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Email" required>
         </div>
         <div class="form-group">
-            <input type="password" class="form-control" id="password" placeholder="Password">
+            <input type="password" class="form-control" id="password" placeholder="Password" required>
         </div>
         <button type="button" class="btn btn-light" (click)="submitLogin()">Submit</button>
     </form>
+    <div class="alert alert-danger" role="alert" *ngIf="error == 'error'">
+        Something went wrong. Please try again later.
+    </div>
+    <div class="alert alert-warning" role="alert" *ngIf="error == 'message' && error_message !== '' && error_message !== null" [innerHTML]="error_message">
+    </div>
+    <div class="alert alert-warning" role="alert" *ngIf="error == 'unauthorized'">
+        Incorrect email or password.
+    </div>
     <footer>
         <br>
         <p class="footer-elements">Do not have an account? <a class="footer-elements" [routerLink]="['/register']">SIGN UP</a></p>
