@@ -12,32 +12,18 @@ import { catchError } from 'rxjs/operators';
 })
 export class LoginComponent {
   access_token: any;
+  user_name: any;
   constructor(@Inject(DOCUMENT) document: Document, private http: HttpClient, private route: ActivatedRoute, private router: Router) {}
 
   ngOnInit(): void {
     this.access_token = localStorage.getItem('access_token') ?? '';
+    this.user_name = localStorage.getItem('user_name') ?? '';
 
-    if (this.access_token !== '') {
-      const url = 'http://localhost/api/auth/me';
-      const headers = {
-        'Authorization': 'Bearer ' + this.access_token
-      }
-      const options = {                                                                                                                                                                                 
-        headers: new HttpHeaders(headers), 
-      };
-      
-      this.http
-        .get<any>(url, options)
-        .pipe(
-          catchError(err => {return this.router.navigate(['login'])})
-        )
-        .subscribe(res => {
-          if (res !== null) {
-            this.router.navigate(['posts']);
-          }
-        })
-      ;
-
+    if (
+      this.access_token !== ''
+      && this.user_name !== ''
+    ) {
+      this.callMeRoute();
       return;
     }
   }
@@ -58,8 +44,33 @@ export class LoginComponent {
 
       if (this.access_token !== '') {
         localStorage.setItem('access_token', this.access_token);
+        this.callMeRoute();
         this.router.navigate(['posts']);
       }
     });
+  }
+
+  callMeRoute () {
+    const url = 'http://localhost/api/auth/me';
+    const headers = {
+      'Authorization': 'Bearer ' + this.access_token
+    }
+    const options = {                                                                                                                                                                                 
+      headers: new HttpHeaders(headers), 
+    };
+    
+    this.http
+      .get<any>(url, options)
+      .pipe(
+        catchError(err => {return this.router.navigate(['login'])})
+      )
+      .subscribe(res => {
+        if (res !== null) {
+          this.user_name = res.data.name
+          localStorage.setItem('user_name', this.user_name);
+          this.router.navigate(['posts']);
+        }
+      })
+    ;
   }
 }

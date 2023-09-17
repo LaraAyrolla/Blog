@@ -1,6 +1,7 @@
 <div class="general-div">
     <header>
         <h1>&#9673;</h1>
+        <h1>Hello, {{user_name}}!</h1>
     </header>
 
     <section class="post-section" *ngFor="let post of posts;">
@@ -11,23 +12,18 @@
         </article>
         <footer>
             <table class="post-footer-table">
-                <tr class="post-footer-tr">
-                    <a [routerLink]="['editar', post.id]">
+                <tr>
+                    <a class="btn btn-success btn-sm me-1" [routerLink]="['editar', post.id]">
                         <td class="post-footer-td">✏️</td>
                         <td class="post-footer-td">Editar</td>
                     </a>
-                </tr>
-            </table>
-            <table class="post-footer-table">
-                <tr class="post-footer-tr">
-                    <a [routerLink]="['deletar', post.id]">
+                    <a class="btn btn-danger btn-sm" [routerLink]="['deletar', post.id]">
                         <td class="post-footer-td">🗑️</td>
                         <td class="post-footer-td">Excluir</td>
                     </a>
                 </tr>
             </table>
         </footer>
-        <table class="table table-striped"><thead><tr><th>Column 1</th><th>Column 2</th></tr></thead><tbody><tr><td>Row 1</td><td>Row 1</td></tr><tr><td>Row 2</td><td>Row 2</td></tr></tbody></table>
     </section>
 
     <section class="no-posts-section" *ngIf="!posts || posts.length == 0">

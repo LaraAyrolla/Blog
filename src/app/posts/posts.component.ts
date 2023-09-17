@@ -14,12 +14,19 @@ import { catchError } from 'rxjs/operators';
 export class PostsComponent {
   access_token: any;
   posts: any;
+  user_name: any;
   constructor(@Inject(DOCUMENT) document: Document, private http: HttpClient, private route: ActivatedRoute, private router: Router) {}
 
   ngOnInit(): void {
     this.access_token = localStorage.getItem('access_token') ?? '';
+    this.user_name = localStorage.getItem('user_name') ?? '';
 
-    if (this.access_token !== '') {
+    if (
+      this.access_token !== ''
+      && this.user_name !== ''
+    ) {
+      this.user_name = this.user_name.split(" ")[0]
+
       const url = 'http://localhost/api/post';
       const headers = {
         'Authorization': 'Bearer ' + this.access_token

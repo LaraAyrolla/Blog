@@ -1,10 +1,18 @@
-<div class="general-div">
+<div class="jumbotron jumbotron-fluid general-div">
     <h1>Login</h1>
+
     <form>
-        <input required id="email" type="text" placeholder="Email">
-        <input required id="password" type="text" placeholder="Password">
-        <button class="login-button" type="button" (click)="submitLogin()">Login</button>
+        <div class="form-group">
+            <input type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Email">
+        </div>
+        <div class="form-group">
+            <input type="password" class="form-control" id="password" placeholder="Password">
+        </div>
+        <button type="button" class="btn btn-light" (click)="submitLogin()">Submit</button>
     </form>
+    <footer>
+        <br>
         <p class="footer-elements">Do not have an account? <a class="footer-elements" [routerLink]="['/register']">SIGN UP</a></p>
         <p><a [routerLink]="['/forgot-password']">Forgot password?</a></p>
+    </footer>
 </div>
