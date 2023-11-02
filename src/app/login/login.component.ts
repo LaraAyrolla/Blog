@@ -42,8 +42,7 @@ export class LoginComponent {
         catchError(err => {return this.defineErrorForAlerts(err)})
       )
       .subscribe(res => {
-        if (!this.defineErrorForAlerts(res))
-        {
+        if (!this.defineErrorForAlerts(res)) {
           this.access_token = res.access_token;
 
           if (this.access_token !== '') {
@@ -82,29 +81,23 @@ export class LoginComponent {
 
   defineErrorForAlerts(res: any): any
   {
-    if (res == null
-      || res == ''
-      || res.status == 'undefined'
-      || res.status == undefined
-    ) {
-      if (res.access_token !== null)
-      {
+    if (!res || res.status == undefined) {
+      if (res.access_token) {
         this.error = 'none';
         return false;
       }
+
       this.error = 'error';
       this.error_message = res;
       return true;
     }
 
-    if (res.status >= 200 && res.status < 300)
-    {
+    if (res.status >= 200 && res.status < 300) {
       this.error = 'none';
       return false;
     }
 
-    switch (res.status)
-    {
+    switch (res.status) {
       case 401:
         this.error = 'unauthorized';
         break;
