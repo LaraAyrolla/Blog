@@ -1,7 +1,21 @@
 <div class="general-div">
     <header>
-        <h1>&#9673;</h1>
-        <h1>Hello, {{user_name}}!</h1>
+        <table style="width: 100%;">
+            <tr>
+                <td style="width: 20%;"></td>
+                <td style="width: 60%;"><h1>&#9673;</h1></td>
+                <td style="width: 20%;">
+                    <button type="button" class="btn btn-danger btn-sm" (click)="submitLogout()">
+                        &#x2718; Logout
+                    </button>
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 20%;"></td>
+                <td style="width: 60%;"><h1>Hello, {{user_name}}!</h1></td>
+                <td style="width: 20%;"></td>
+            </tr>
+        </table>
     </header>
 
     <section class="post-section" *ngFor="let post of posts;">
