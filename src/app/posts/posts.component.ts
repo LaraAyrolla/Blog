@@ -4,6 +4,7 @@ import { Inject }  from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { DOCUMENT } from '@angular/common';
 import { catchError } from 'rxjs/operators';
+import { AppModule } from '../app.module';
 
 @Component({
   selector: 'app-posts',
@@ -17,7 +18,13 @@ export class PostsComponent {
   user_name: any;
   error: any;
   error_message: any;
-  constructor(@Inject(DOCUMENT) document: Document, private http: HttpClient, private route: ActivatedRoute, private router: Router) {}
+  constructor(
+    @Inject(DOCUMENT) document: Document,
+    private http: HttpClient,
+    private route: ActivatedRoute,
+    private router: Router,
+    private appModule: AppModule,
+  ) {}
 
   ngOnInit(): void {
     this.access_token = localStorage.getItem('access_token') ?? '';
@@ -73,99 +80,18 @@ export class PostsComponent {
       this.http
         .post<any>(url, '', options)
         .pipe(
-          catchError( err => {return this.defineErrorForAlerts(err)})
+          catchError( err => {return this.appModule.defineErrorsFromResponse(err, err.message, this)})
         )
         .subscribe(res => {
-          if (!this.defineErrorForAlerts(res)) {
+          if (!this.appModule.defineErrorsFromResponse(res, res.message, this)) {
             this.access_token = null;
             localStorage.removeItem('access_token');
             localStorage.removeItem('user_name');
+
             this.router.navigate(['login']);
           }
         })
       ;
     }
-  }
-
-  defineErrorForAlerts(res: any): any
-  {
-    if (!res || res.status == undefined) {
-      if (res.message) {
-        this.error = 'none';
-        return false;
-      }
-
-      this.error = 'error';
-      this.error_message = res;
-      return true;
-    }
-
-    if (res.status >= 200 && res.status < 300) {
-      this.error = 'none';
-      return false;
-    }
-
-    switch (res.status) {
-      case 401:
-        this.error = 'unauthorized';
-        break;
-      case 0:
-        this.error = 'error';
-        break;
-      case 400:
-        this.error = 'message';
-        this.error_message = res.message;
-        break;
-      case 404:
-        this.error = 'error';
-        break;
-      case 405:
-        this.error = 'error';
-        break;
-      case 422:
-        this.error = 'message';
-        this.error_message = this.getAllErrorMessages(res.error.errors);
-        break;
-      case 500:
-        this.error = 'error';
-        break;
-      default:
-        this.error = 'error';
-        break;
-    }
-
-    return true;
-  }
-
-  getFirstErrorMessage (errors: Array<string>): string
-  {
-    var error_message = '';
-    for (var error in errors) {
-      error_message += errors[error] + ". " ;
-      break;
-    }
-
-    return error_message;
-  }
-
-  getAllErrorMessages (errors: Array<string>): string
-  {
-    var error_message = '';
-    for (var error in errors) {
-      error_message += errors[error] + ". <br>";
-    }
-
-    return error_message;
-  }
-
-  getAllErrorMessagesAsList (errors: Array<string>): string
-  {
-    var error_message = '<ul class="text-align: left;">';
-    for (var error in errors) {
-      error_message += "<li>" + errors[error] + "</li>";
-    }
-    error_message += '</li>'
-
-    return error_message;
   }
 }
