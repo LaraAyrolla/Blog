@@ -4,6 +4,7 @@ import { Inject }  from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { DOCUMENT } from '@angular/common';
 import { catchError } from 'rxjs/operators';
+import { AppModule } from '../app.module';
 
 @Component({
   selector: 'app-posts',
@@ -15,16 +16,21 @@ export class PostsComponent {
   access_token: any;
   posts: any;
   user_name: any;
-  constructor(@Inject(DOCUMENT) document: Document, private http: HttpClient, private route: ActivatedRoute, private router: Router) {}
+  error: any;
+  error_message: any;
+  constructor(
+    @Inject(DOCUMENT) document: Document,
+    private http: HttpClient,
+    private route: ActivatedRoute,
+    private router: Router,
+    private appModule: AppModule,
+  ) {}
 
   ngOnInit(): void {
     this.access_token = localStorage.getItem('access_token') ?? '';
     this.user_name = localStorage.getItem('user_name') ?? '';
 
-    if (
-      this.access_token !== ''
-      && this.user_name !== ''
-    ) {
+    if (this.access_token !== '' && this.user_name !== '') {
       this.user_name = this.user_name.split(" ")[0]
 
       const url = 'http://localhost/api/post';
@@ -53,5 +59,39 @@ export class PostsComponent {
     }
 
     this.router.navigate(['login']);
+  }
+
+  submitLogout()
+  {
+    this.access_token = localStorage.getItem('access_token') ?? '';
+    this.user_name = localStorage.getItem('user_name') ?? '';
+
+    if (this.access_token !== '' && this.user_name !== '') {
+      this.user_name = this.user_name.split(" ")[0]
+
+      const url = 'http://localhost/api/auth/logout';
+      const headers = {
+        'Authorization': 'Bearer ' + this.access_token
+      }
+      const options = {                                                                                                                                                                                 
+        headers: new HttpHeaders(headers), 
+      };
+
+      this.http
+        .post<any>(url, '', options)
+        .pipe(
+          catchError( err => {return this.appModule.defineErrorsFromResponse(err, err.message, this)})
+        )
+        .subscribe(res => {
+          if (!this.appModule.defineErrorsFromResponse(res, res.message, this)) {
+            this.access_token = null;
+            localStorage.removeItem('access_token');
+            localStorage.removeItem('user_name');
+
+            this.router.navigate(['login']);
+          }
+        })
+      ;
+    }
   }
 }
