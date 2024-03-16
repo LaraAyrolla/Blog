@@ -18,6 +18,7 @@ export class PostsComponent {
   user_name: any;
   error: any;
   error_message: any;
+  success_message: any;
   constructor(
     @Inject(DOCUMENT) document: Document,
     private http: HttpClient,
@@ -89,6 +90,38 @@ export class PostsComponent {
             localStorage.removeItem('user_name');
 
             this.router.navigate(['login']);
+          }
+        })
+      ;
+    }
+  }
+
+  deletePost(postId: any)
+  {
+    this.access_token = localStorage.getItem('access_token');
+  
+    if (
+      confirm('Are you sure you want to delete the post? This action cannot be undone!')
+      && postId
+      && this.access_token
+    ) {
+      const url = 'http://localhost/api/post/' + postId;
+      const headers = {
+        'Authorization': 'Bearer ' + this.access_token
+      }
+      const options = {                                                                                                                                                                                 
+        headers: new HttpHeaders(headers), 
+      };
+
+      this.http
+        .delete<any>(url, options)
+        .pipe(
+          catchError( err => {return this.appModule.defineErrorsFromResponse(err, err.message, this)})
+        )
+        .subscribe(res => {
+          if (!this.appModule.defineErrorsFromResponse(res, true, this)) {
+            alert('Post successfully deleted!');
+            window.location.reload();
           }
         })
       ;
