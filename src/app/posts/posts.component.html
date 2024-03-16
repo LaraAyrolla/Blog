@@ -29,11 +29,11 @@
                 <tr>
                     <a class="btn btn-success btn-sm me-1" [routerLink]="['editar', post.id]">
                         <td class="post-footer-td">✏️</td>
-                        <td class="post-footer-td">Editar</td>
+                        <td class="post-footer-td">Edit</td>
                     </a>
-                    <a class="btn btn-danger btn-sm" [routerLink]="['deletar', post.id]">
+                    <a class="btn btn-danger btn-sm" (click)="deletePost(post.id)">
                         <td class="post-footer-td">🗑️</td>
-                        <td class="post-footer-td">Excluir</td>
+                        <td class="post-footer-td">Delete</td>
                     </a>
                 </tr>
             </table>
