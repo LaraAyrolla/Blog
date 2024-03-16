@@ -1,11 +1,16 @@
-<div class="general-div">
+<div class="jumbotron jumbotron-fluid general-div">
     <h1>Sign Up</h1>
     <form>
         <input id="name" type="text" placeholder="Name">
         <input id="email" type="text" placeholder="Email">
-        <input id="phone" type="text" placeholder="Phone" mask="+##(##)#####-####">
-        <input id="password" type="text" placeholder="Password">
-        <button class="login-button" type="button">Create Account</button>
+        <input id="phone" type="text" placeholder="Phone" data-mask="(00) 00000-0000" data-mask-selectonfocus="true">
+        <input id="password" type="password" placeholder="Password">
+        <button type="button" class="btn btn-light" (click)="submitSignUp()">Create Account</button>
     </form>
+    <div class="alert alert-danger" role="alert" *ngIf="error == 'error'">
+        Something went wrong. Please try again later.
+    </div>
+    <div class="alert alert-warning" role="alert" *ngIf="error == 'message' && error_message !== '' && error_message !== null" [innerHTML]="error_message">
+    </div>
         <p class="footer-elements">Already have an account? <a class="footer-elements" [routerLink]="['/login']">LOGIN</a></p>
 </div>

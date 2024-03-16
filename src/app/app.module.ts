@@ -3,6 +3,9 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { Router, ActivatedRoute } from '@angular/router';
+import { catchError } from 'rxjs/operators';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -41,6 +44,11 @@ interface Component {
 })
 
 export class AppModule { 
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+  ) {}
+
   defineErrorsFromResponse(res: any, requiredProperty: any, module: Component): any
   {
     if (!res || res.status == undefined) {
@@ -109,5 +117,29 @@ export class AppModule {
     error_message += '</li>'
 
     return error_message;
+  }
+
+  callMeRoute (module: any) {
+    const url = 'http://localhost/api/auth/me';
+    const headers = {
+      'Authorization': 'Bearer ' + module.access_token
+    }
+    const options = {                                                                                                                                                                                 
+      headers: new HttpHeaders(headers), 
+    };
+    
+    this.http
+      .get<any>(url, options)
+      .pipe(
+        catchError(err => {return this.router.navigate(['login'])})
+      )
+      .subscribe(res => {
+        if (res !== null) {
+          module.user_name = res.data.name
+          localStorage.setItem('user_name', module.user_name);
+          this.router.navigate(['posts']);
+        }
+      })
+    ;
   }
 }

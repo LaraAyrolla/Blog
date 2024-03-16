@@ -21,10 +21,26 @@ button{
     text-align: center;
     width: 20%;
     margin: 2% 40%;
-    padding: 2% 2%;
-    line-height: 7%;
 }
-a{
-    color: #76e667;
+a:link, a:visited, a:active{
+    color: #c7ffc0;
     text-align: center;
+    text-decoration: none;
+}
+a:hover{
+    color: #ff0000;
+    text-align: center;
+    text-decoration: underline;
+}
+.alert
+{
+    width: 50%;
+    margin: 2% 25%;
+    padding: 1% 1%;
+    text-align: center;
+}
+@media screen and (max-width: 767px) {
+    .general-div {
+        margin: 0 1%;
+    }
 }
