@@ -63,25 +63,13 @@ export class AppModule {
       case 401:
         module.error = 'unauthorized';
         break;
-      case 0:
-        module.error = 'error';
-        break;
       case 400:
         module.error = 'message';
         module.error_message = res.message;
         break;
-      case 404:
-        module.error = 'error';
-        break;
-      case 405:
-        module.error = 'error';
-        break;
       case 422:
         module.error = 'message';
         module.error_message = this.mountAllErrorMessages(res.error.errors);
-        break;
-      case 500:
-        module.error = 'error';
         break;
       default:
         module.error = 'error';
@@ -93,8 +81,8 @@ export class AppModule {
 
   mountFirstErrorMessage (errors: Array<string>): string
   {
-    var error_message = '';
-    for (var error in errors) {
+    let error_message = '';
+    for (let error in errors) {
       error_message += errors[error] + ". " ;
       break;
     }
@@ -104,8 +92,8 @@ export class AppModule {
 
   mountAllErrorMessages (errors: Array<string>): string
   {
-    var error_message = '';
-    for (var error in errors) {
+    let error_message = '';
+    for (let error in errors) {
       error_message += errors[error] + ". <br>";
     }
 
@@ -114,8 +102,8 @@ export class AppModule {
 
   mountAllErrorMessagesAsList (errors: Array<string>): string
   {
-    var error_message = '<ul class="text-align: left;">';
-    for (var error in errors) {
+    let error_message = '<ul class="text-align: left;">';
+    for (let error in errors) {
       error_message += "<li>" + errors[error] + "</li>";
     }
     error_message += '</li>'
