@@ -1,16 +1,49 @@
 <div class="jumbotron jumbotron-fluid general-div">
     <h1>Sign Up</h1>
-    <form>
-        <input id="name" type="text" placeholder="Name">
-        <input id="email" type="text" placeholder="Email">
-        <input id="phone" type="text" placeholder="Phone" data-mask="(00) 00000-0000" data-mask-selectonfocus="true">
-        <input id="password" type="password" placeholder="Password">
-        <button type="button" class="btn btn-light" (click)="submitSignUp()">Create Account</button>
+    <form #signUpForm="ngForm">
+        <div class="form-group">
+            <input id="name" type="text" placeholder="Name" required>
+        </div>
+
+        <div class="form-group">
+            <input id="email" type="text" placeholder="Email" #emailField="ngModel" [(ngModel)]="email" email required>
+            <div *ngIf="emailField.invalid && emailField.touched" class="alert alert-danger">
+                Please enter a valid email address.
+            </div>
+        </div>
+
+        <div class="form-group">
+            <input id="phone" type="text" placeholder="Phone" data-mask="(00) 00000-0000" data-mask-selectonfocus="true" #phoneField="ngModel" [(ngModel)]="phone" pattern="^\(\d{2}\) \d{5}-\d{4}$" required>
+            <div *ngIf="phoneField.invalid" class="alert alert-danger">
+                Please enter a valid phone number in the format (00) 00000-0000.
+            </div>
+        </div>
+
+        <div class="form-group">
+            <input id="password" name="password" type="password" placeholder="Password" [(ngModel)]="password" required>
+
+            <input id="password-confirmation" name="password-confirmation" type="password" placeholder="Password Confirmation" [(ngModel)]="password_confirmation" required>
+
+            <div *ngIf="password != password_confirmation && password_confirmation; else enableButton" required>
+                <div class="alert alert-danger" role="alert" >
+                    Passwords do not coincide.
+                </div>
+                <button type="button" class="btn btn-light" (click)="submitSignUp()" [disabled]="true">Create Account</button>
+            </div>
+        </div>
+
+        <ng-template #enableButton>
+            <button type="button" class="btn btn-light" (click)="submitSignUp()">Create Account</button>
+        </ng-template>
     </form>
+
     <div class="alert alert-danger" role="alert" *ngIf="error == 'error'">
         Something went wrong. Please try again later.
     </div>
-    <div class="alert alert-warning" role="alert" *ngIf="error == 'message' && error_message !== '' && error_message !== null" [innerHTML]="error_message">
-    </div>
+
+    <div class="alert alert-warning" role="alert" *ngIf="error == 'message' && error_message !== '' && error_message !== null" [innerHTML]="error_message"></div>
+
+    <footer>
         <p class="footer-elements">Already have an account? <a class="footer-elements" [routerLink]="['/login']">LOGIN</a></p>
+    </footer>
 </div>

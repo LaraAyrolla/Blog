@@ -15,9 +15,11 @@ export class RegisterComponent {
   access_token: any;
   error: any;
   error_message: any;
-  user_name: any;
-  user_email: any;
-  user_password: any;
+  name: any;
+  email: any;
+  phone: any;
+  password: any;
+  password_confirmation: any;
   constructor(
     @Inject(DOCUMENT) document: Document,
     private http: HttpClient,
@@ -27,16 +29,17 @@ export class RegisterComponent {
 
   submitSignUp()
   {
-    this.user_name = (<HTMLInputElement>document.getElementById("name")).value;
-    this.user_email = (<HTMLInputElement>document.getElementById("email")).value;
-    const phone = ((<HTMLInputElement>document.getElementById("phone")).value).replace(/\D+/g, '');
-    this.user_password = (<HTMLInputElement>document.getElementById("password")).value;
+    this.name = (<HTMLInputElement>document.getElementById("name")).value;
+    this.email = (<HTMLInputElement>document.getElementById("email")).value;
+    this.phone = ((<HTMLInputElement>document.getElementById("phone")).value).replace(/\D+/g, '');
+    this.password = (<HTMLInputElement>document.getElementById("password")).value;
+    password: this.password_confirmation = (<HTMLInputElement>document.getElementById("password-confirmation")).value;
 
     let body = {
-      name: this.user_name,
-      email: this.user_email,
-      phone: phone,
-      password: this.user_password
+      name: this.name,
+      email: this.email,
+      phone: this.phone,
+      password: this.password
     };
 
     const url = 'http://localhost/api/auth/register';
